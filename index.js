@@ -1,21 +1,25 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
+const reqFilter = (req, res, next) => {
+  if (!req.query.age) {
+    res.send("Please provide me the age");
+  } else if (req.query.age < 18) {
+    res.send("You are not allow to visit on this page");
+  } else {
+    next();
+  }
+};
 
-app.set('view engine', 'ejs');
+// app.use(reqFilter);
 
-app.get('/profile',(req, res)=>{
-    const user={
-        name:'Akhilesh',
-        email:'akhi@gmail.com',
-        city:'Ujjain',
-        skils:['PHP','Node','C++','Java']
-    }
-    res.render('profile',{user});
-})
-
-app.get('/login',(req, res)=>{
-    res.render('login');
-})
-
+app.get("/", (req, res) => {
+  res.send("Welcome to the Home Page");
+});
+app.get("/profile", (req, res) => {
+  res.send("Welcome to the Profile Page");
+});
+app.get("/about",reqFilter, (req, res) => {
+    res.send("Welcome to the About us Page");
+  });
 app.listen(3000);
